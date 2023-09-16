@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../static/lib/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.3"></script>
+    <link rel="stylesheet"
+        href="../../static/lib/hightlightjs/styles/github-dark-dimmed.min.css">
+    <script src="../../static/lib/hightlightjs/highlight.min.js" type="text/javascript" charset="utf-8"></script>
+<!--        <script >hljs.initHighlightingOnLoad();</script>-->
+    <script src="../../static/lib/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" type="text/css" href="../../static/css/index.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+
+
+</head>
+<body>
+    <div class="main" ref="main" id="app">
+        <div class="navbar">
+            <div class="nav-content">
+                <div style="width: 40px; margin-left: 5px">
+                    <el-button  @click="drawer = true" circle>C</el-button>
+                </div>
+                <div style="width: 20px;"></div>
+                <div class="title">Large Class Labeling</div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="body-content">
+
+                <div class="top-info">
+                    <div style="font-weight: bolder; font-size: 18px; color: dimgrey;">Project List</div>
+                    <el-button @click="dialogFormVisible = true" size="mini" round>+ Add Project</el-button>
+                </div>
+                <div class="box-card" v-for="pj in pList">
+                    <div class="project-info">
+                        <div class="pname">
+                            <span>Project Name:</span>
+                            <span>
+                                {%verbatim myblock%}
+                                    {{pj.fields.project_name}}
+                                {%endverbatim myblock%}
+                            </span>
+                        </div>
+                        <div class="info">
+                            <div class="iname">
+                                <span>Add Time:</span>
+                                <span>
+                                    {%verbatim myblock%}
+                                        {{pj.fields.add_time}}
+                                    {%endverbatim myblock%}
+                                </span>
+                            </div>
+<!--                            <div class="iname">-->
+<!--                                <span>Method Count:</span>-->
+<!--                                <span>-->
+<!--                                    {%verbatim myblock%}-->
+<!--                                        {{pj.fields.method_count}}-->
+<!--                                    {%endverbatim myblock%}-->
+<!--                                </span>-->
+<!--                            </div>-->
+                            <div class="iname">
+                                <span>Class Count:</span>
+                                <span>
+                                    {%verbatim myblock%}
+                                        {{pj.fields.class_count}}
+                                    {%endverbatim myblock%}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group">
+
+                        <el-button style="margin-left: 10px; width: 90px" size="mini" @click="review(pj.pk)" round>Review</el-button>
+                        <el-button style="width: 90px; background-color: lightgray" size="mini" @click="openExportDialog(pj.pk)" round>Export</el-button>
+                        <el-button style="width: 90px; background-color: darkgrey" size="mini" round>Delete</el-button>
+                    </div>
+
+                </div>
+
+                    <el-dialog title="Project Import" :visible.sync="dialogFormVisible" append-to-body=true>
+                      <el-form :model="form">
+                        <el-form-item label="Project Name: " :label-width="formLabelWidth">
+                          <el-input v-model="form.name" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="Project Path: " :label-width="formLabelWidth">
+                          <el-input v-model="form.path" autocomplete="off"></el-input>
+                        </el-form-item>
+                      </el-form>
+                      <div slot="footer" class="dialog-footer">
+                        <el-button style="width: 90px; background-color: whitesmoke" size="mini" @click="dialogFormVisible = false">Cancle</el-button>
+                        <el-button style="width: 90px; background-color: darkgrey" size="mini" @click="createProject">Confirm</el-button>
+                      </div>
+
+                    </el-dialog>
+
+                    <el-dialog title="CSV Export" :visible.sync="exportCSVFormVisible" append-to-body=true>
+                      <el-form :model="form">
+                        <el-form-item label="Save Path: " :label-width="formLabelWidth">
+                          <el-input v-model="exportForm.save_path" autocomplete="off"></el-input>
+                        </el-form-item>
+                      </el-form>
+                      <div slot="footer" class="dialog-footer">
+                        <el-button style="width: 90px; background-color: whitesmoke" size="mini" @click="exportCSVFormVisible = false">Cancle</el-button>
+                        <el-button style="width: 90px; background-color: darkgrey" size="mini" @click="exportCSV">Confirm</el-button>
+                      </div>
+
+                    </el-dialog>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+<script type="text/javascript">
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'meg',
+            dialogFormVisible:false,
+            exportCSVFormVisible:false,
+            formLabelWidth: '120px',
+            pList:[],
+            form: {
+              name: '',
+              path: ''
+            },
+            exportForm:{
+                save_path:"",
+                project_id:""
+            }
+        },
+        created(){
+            this.projectList()
+        },
+        methods: {
+          async createProject(){
+            var url = '/create_lc_project';
+                  // POST
+            const response = await axios.post(url, this.form);
+            console.log(response)
+            if (response.status == 200) {
+                this.dialogFormVisible = false
+            } else {
+                alert("error")
+            }
+          },
+          openExportDialog(pid){
+            this.exportCSVFormVisible = true
+            this.exportForm.project_id = pid
+          },
+          async exportCSV(){
+            var url = '/export_csv';
+            // POST
+            const response = await axios.post(url, this.exportForm);
+            console.log(response)
+            if (response.status == 200) {
+                this.exportCSVFormVisible = false
+            } else {
+                alert("error")
+            }
+          },
+
+          async projectList() {
+              var url = '/lc_project_list';
+              const response = await axios.get(url, this.form);
+              if (response.status == 200) {
+                  this.pList = response.data
+              }
+              console.log(this.pList)
+          },
+          async review(pid) {
+              var url = '/lc_review?pid='+ pid
+              window.open(url)
+          }
+
+        }
+    })
+
+</script>
+</html>

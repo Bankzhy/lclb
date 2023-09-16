@@ -1,0 +1,173 @@
+.main {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    /*background: pink;*/
+    z-index: 0;
+    overflow:hidden; word-break:break-all;
+    display: flex;
+    flex-direction: column;
+}
+.navbar {
+    height: 50px;
+    overflow: hidden;
+    position: relative;
+
+    /*box-shadow: 0 1px 4px rgba(0,21,41,.08);*/
+    /*padding-left: 10px;*/
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+.nav-content {
+    height: 50px;
+    width: 100%;
+    background: gray;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 1px 4px rgba(0,21,41,.08);
+    /*padding-left: 10px;*/
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-content: center;
+    align-items: center;
+}
+.title {
+    font-size: 25px;
+    font-weight: bolder;
+    color: white;
+}
+.content{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 50px;
+    left: 0px;
+    bottom: 0px;
+    /*background: lightsteelblue;*/
+    z-index: 0;
+    overflow:hidden; word-break:break-all;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    align-items: center;
+}
+
+.body-content{
+    height: 100%;
+    width: 100%;
+
+    left: 0px;
+    bottom: 0px;
+    background: lightgrey;
+    z-index: 0;
+    overflow:hidden; word-break:break-all;
+    display: flex;
+    flex-direction: row;
+    /*align-content: center;*/
+    align-items: center;
+}
+
+.left {
+    height: 100%;
+    width: 50%;
+    /*overflow: scroll;*/
+    /*background-color: #0aaeb3;*/
+}
+.right {
+    height: 100%;
+    width: 50%;
+    /*background-color: rebeccapurple;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+}
+.rright {
+    height: 100%;
+    width: 32%;
+    overflow: scroll;
+    overflow-x: scroll;
+    /*background-color: rebeccapurple;*/
+}
+
+.code-area {
+    height: 90%;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 60px;
+    overflow: scroll;
+}
+
+
+.ques-card{
+    width: 90%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.ques{
+
+    font-weight: bolder;
+    font-size: 18px;
+    padding: 20px;
+    /*background-color: #0aaeb3;*/
+    color: dimgrey;
+    display: flex;
+    flex-direction: column;
+}
+.detail {
+    font-weight: bolder;
+    font-size: 15px;
+    padding: 10px 20px;
+
+    /*background-color: #0aaeb3;*/
+    color: grey;
+    /*background-color: rebeccapurple;*/
+    white-space: pre-line;
+    word-break: break-word;
+}
+.btn-group{
+    display: flex;
+    flex-direction: row-reverse;
+    padding-right: 20px;
+    align-items: center;
+    padding: 10px;
+}
+    /* 选中后的字体颜色 */
+.el-radio__input.is-checked + .el-radio__label {
+    color: dimgrey !important;
+}
+
+/* 选中后小圆点的颜色 */
+.el-radio__input.is-checked .el-radio__inner {
+    background: lightgrey !important;
+    border-color: dimgrey !important;
+}
+.btns{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+}
+.el-table .cell {
+      white-space: pre-wrap;
+}
+
+.el-table .warning-row {
+background: oldlace;
+}
+
+.el-table .success-row {
+background: #f0f9eb;
+}
